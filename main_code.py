@@ -1,6 +1,6 @@
 #We need to install pandas, statsmodels, and the data plotting package matplotlib. Their dependencies will also be installed:
-#It will be done using pip installers.  
-# ->          pip install pandas numpy statsmodels matplotlib
+#It will be done using command prompt.  
+# code->          pip install pandas numpy statsmodels matplotlib
 
 
 
