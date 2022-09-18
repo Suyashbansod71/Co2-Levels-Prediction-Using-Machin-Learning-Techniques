@@ -1,0 +1,108 @@
+Author:
+
+SUYASH BANSOD
+(IIIT Pune CSE)
+
+Initial Steps:
+
+#We need to install pandas, statsmodels, and the data plotting package matplotlib. Their dependencies will also be installed:
+#It will be done using pip installers.  
+# ->          pip install pandas numpy statsmodels matplotlib
+
+
+Loading Data Sets into the Panda Dataframe
+# dataset called “Atmospheric CO2 from Continuous Air Samples at Mauna Loa Observatory, Hawaii, U.S.A.,” 
+# which collected CO2 samples from March 1958 to December 2001
+
+
+MainSteps:
+
+-------------------------------------------------STEP - 1-------------------------------------------------------------------------------------
+
+# Preprocessing our data for our convenience.
+#  Weekly data can be tricky to work with since it’s a briefer amount of time,
+ so let’s use monthly averages instead.
+#  We’ll make the conversion with the resample function. 
+#  For simplicity, we can also use the fillna() function to ensure 
+that we have no missing values in our time series.
+
+(Theory)
+The ARIMA Time Series Model
+There are three distinct integers (p, d, q) that are used to parametrize ARIMA models. 
+Because of that, ARIMA models are denoted with the notation ARIMA(p, d, q). 
+Together these three parameters account for seasonality, trend, and noise in datasets:
+
+When dealing with seasonal effects, we make use of the seasonal ARIMA, which is denoted as ARIMA(p,d,q)(P,D,Q)s. 
+Here, (p, d, q) are the non-seasonal parameters described above, while (P, D, Q) follow the same definition but are applied to the seasonal component of the time series. 
+The term s is the periodicity of the time series (4 for quarterly periods, 12 for yearly periods, etc.).
+
+-------------------------------------------------STEP - 2--------------------------------------------------------------------------------------------------
+
+*Parameter Selection for the ARIMA Time Series Model*
+(1)
+When looking to fit time series data with a seasonal ARIMA model, our first goal is to find the values of ARIMA(p,d,q)(P,D,Q)s that optimize a metric of interest. 
+We will use a “grid search” to iteratively explore different combinations of parameters. For each combination of parameters, 
+we fit a new seasonal ARIMA model with the SARIMAX() function from the statsmodels module and assess its overall quality.
+We can now use the triplets of parameters defined above to automate the process of training and evaluating ARIMA models on different combinations.
+(2)
+iterates through combinations of parameters and uses the SARIMAX function from statsmodels to fit the corresponding Seasonal ARIMA model.
+ Here, the order argument specifies the (p, d, q) parameters, while the seasonal_order argument specifies the (P, D, Q, S) seasonal component of the Seasonal ARIMA model. 
+After fitting each SARIMAX()model, the code prints out its respective AIC score. 
+
+
+-------------------------------------------------STEP - 3------------------------------------------------------------------------------------
+*Fitting an ARIMA Time Series Model*
+
+We’ll start by plugging the optimal parameter values into a new SARIMAX model.
+
+*Generating Model Diagnostics*
+
+When fitting seasonal ARIMA models (and any other models for that matter), it is important to run model diagnostics to ensure 
+that none of the assumptions made by the model have been violated. 
+The plot_diagnostics object allows us to quickly generate model diagnostics and investigate for any unusual behavior.
+
+
+
+-------------------------------------------------STEP - 4------------------------------------------------------------------------------------------
+*  Validating Forecasts * 
+(1)
+ We start by comparing predicted values to real values of the time series, which will help us understand the accuracy of our forecasts. 
+The get_prediction() and conf_int() attributes allow us to obtain the values and associated confidence intervals for forecasts of the time series.
+
+(2)
+We can plot the real and forecasted values of the CO2 time series to assess how well we did. 
+Notice how we zoomed in on the end of the time series by slicing the date index.
+(3)
+*  quantifying the accuracy of our forecasts * 
+We will use the MSE (Mean Squared Error), which summarizes the average error of our forecasts. For each predicted value, we compute its distance to the 
+true value and square the result.
+The results need to be squared so that positive/negative differences do not cancel each other out when we compute the overall mean.
+
+(4)
+we specify to start computing the dynamic forecasts and confidence intervals from January 1998 onwards.
+(5)
+Plotting the observed and forecasted values of the time series, we see that the overall forecasts are accurate even when using dynamic forecasts.
+ All forecasted values (red line) match pretty closely to the ground truth (blue line), 
+and are well within the confidence intervals of our forecast.
+(6)
+Once again, we quantify the predictive performance of our forecasts by computing the MSE.
+
+
+
+-------------------------------------------------STEP - 5---------------------------------------------------------------------------------------------------
+(1)
+ we describe how to leverage our seasonal ARIMA time series model to forecast future values. The get_forecast() attribute of our time series object can 
+compute forecasted values for a specified number of steps ahead.
+(2)
+We can use the output of this code to plot the time series and forecasts of its future values.
+
+Both the forecasts and associated confidence interval that we have generated can now be used to further understand the time series and foresee what to expect.
+ Our forecasts show that the time series is expected to continue increasing at a steady pace.
+
+As we forecast further out into the future, it is natural for us to become less confident in our values. 
+This is reflected by the confidence intervals generated by our model, which grow larger as we move further out into the future.
+
+
+Conclusion
+Learned how to implement a seasonal ARIMA Model in Python. 
+We made extensive use of the pandas and statsmodels libraries and showed how to run model diagnostics,as well as how to produce forecasts of the CO2 time series.
